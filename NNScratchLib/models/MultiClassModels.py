@@ -18,25 +18,22 @@ class NeuralNetwork:
         A = A.reshape(len(A),1)
         y = y.reshape(len(y),1)
 
-        # Calculamos el error de la última capa
-        error = A - y
+        dz = A - y
 
         A_prev = self.feedfoward(X, -1)
         A_prev = A_prev.reshape(len(A_prev),1)
 
-        # actualizamos los pesos de la última capa
-        dW = error.dot(A_prev.T)
-
+        dW = dz.dot(A_prev.T)
         self.layers[-1].weights -= dW
-        self.layers[-1].bias -= error
+        self.layers[-1].bias -= dz
 
-        # Calculamos el error de la capa anterior
-        A_prev_2 = self.feedfoward(X, -2)
-        A_prev_2 = A_prev_2.reshape(len(A_prev_2),1)
+        for k, layer in enumerate(self.layers[-2::-1]):
+            A_prev = self.feedfoward(X, -k-2)
+            A_prev = A_prev.reshape(len(A_prev),1)
 
-        derivate = self.layers[-2].activation_derivate(self.layers[-2].z(A_prev_2))
-        dz2 = derivate*self.layers[-1].weights.T.dot(error)
-        self.layers[-2].bias -= lr*dz2
-        
-        dz2 = dz2.dot(A_prev_2.T)
-        self.layers[-2].weights -= lr*dz2
+            derivate = layer.activation_derivate(layer.z(A_prev))
+            dz = derivate*self.layers[-k-1].weights.T.dot(dz)
+            layer.bias -= lr*dz
+            
+            dW = dz.dot(A_prev.T)
+            layer.weights -= lr*dW
