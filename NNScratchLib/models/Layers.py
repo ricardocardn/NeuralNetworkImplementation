@@ -1,6 +1,6 @@
 import numpy as np
 
-class Layer:
+class SequentialLayer:
     def __init__(self, input, output, activation, activation_derivate):
         self.units = output
         self.weights = np.random.randn(output, input)
