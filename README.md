@@ -38,8 +38,13 @@ Three optimization algorithms are implemented:
 ## Usage Example
 
 ```python
-# Example Usage
-import numpy as np
+# Import the necessary classes and functions
+from NNScratchLib.models.MultiClassModels import NeuralNetwork
+from NNScratchLib.models.Layers import SequentialLayer
+
+from NNScratchLib.functions import activation_functions
+from NNScratchLib.functions import measure_functions
+from NNScratchLib.functions import optimizers
 
 # Create a neural network
 model = NeuralNetwork()
