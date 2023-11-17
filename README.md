@@ -2,6 +2,8 @@
 
 This project implements a simple neural network framework in Python, including functionalities for forward and backward propagation. The neural network consists of customizable sequential layers, allowing the user to define the architecture, activation functions, and their derivatives. The project also includes implementations of three optimization algorithms: gradient descent, momentum gradient descent, and Adam.
 
+In the article [Implementación del Algoritmo de Back-Propagation Para una Red Neuronal de Clasificación Multi-Clase](Back_Propagation_Implementation.pdf) you can see the mathematical basis for this code.
+
 ## NeuralNetwork Class
 
 The `NeuralNetwork` class is the core component of this project. It allows users to create and configure a neural network by adding sequential layers. The key methods include:
