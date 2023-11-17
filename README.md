@@ -46,8 +46,6 @@ from NNScratchLib.functions import activation_functions
 from NNScratchLib.functions import measure_functions
 from NNScratchLib.functions import optimizers
 
-import numpy as np
-
 # Create a neural network
 model = NeuralNetwork()
 
