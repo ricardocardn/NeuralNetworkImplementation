@@ -56,4 +56,4 @@ model.set(SequentialLayer(input_size, hidden_size, activation_function, activati
 model.set(SequentialLayer(hidden_size, output_size, activation_functions.softmax, None))
 
 # Train the model using gradient descent
-acc_list, loss_list = gradient_descent(model, X_train, y_train, measure_function, epochs=100, learning_rate=0.01)
+gradient_descent(model, X_train, y_train, measure_function, epochs=100, learning_rate=0.01)
