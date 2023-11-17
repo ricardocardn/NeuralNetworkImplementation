@@ -1,10 +1,16 @@
 import numpy as np
 
+def cross_entropy(Y_pred, Y):
+    return -np.sum(Y*np.log(Y_pred.reshape(1, len(Y_pred))))
+
+
 def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.01):
     X, X_val = X[:int(len(X)*0.8)], X[int(len(X)*0.8):]
     y, y_val = y[:int(len(y)*0.8)], y[int(len(y)*0.8):]
 
     acc_list = []
+    loss_list = []
+
     for epoch in range(epochs):
         for i in range(len(X)):
             dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])                
@@ -17,10 +23,15 @@ def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
             acc = measure_function(y_val, Y_pred)
-            print(f'epoch {epoch:3} - accuracy {acc:.5f}')
-            acc_list.append(acc)
 
-    return acc_list
+            loss = cross_entropy(model.feedfoward(X[i]), y[i])
+
+            print(f'epoch {epoch:3} - Loss {loss:.5f}, Accuracy {acc:.5f}')
+
+            acc_list.append(acc)
+            loss_list.append(loss)
+
+    return acc_list, loss_list
 
 
 def momentum_gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.01):
@@ -31,6 +42,8 @@ def momentum_gradient_descent(model, X, y, measure_function, epochs=100, learnin
     vb = [np.zeros(layer.bias.shape) for layer in model.layers]
 
     acc_list = []
+    loss_list = []
+
     for epoch in range(epochs):
         for i in range(len(X)):
             dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])                
@@ -49,8 +62,13 @@ def momentum_gradient_descent(model, X, y, measure_function, epochs=100, learnin
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
             acc = measure_function(y_val, Y_pred)
-            print(f'epoch {epoch:3} - accuracy {acc:.5f}')
+
+            loss = cross_entropy(model.feedfoward(X[i]), y[i])
+
+            print(f'epoch {epoch:3} - Loss {loss:.5f}, Accuracy {acc:.5f}')
+
             acc_list.append(acc)
+            loss_list.append(loss)
 
     return acc_list
 
@@ -66,6 +84,8 @@ def Adam(model, X, y, measure_function, epochs=100, learning_rate=0.01):
     sb = [np.zeros(layer.bias.shape) for layer in model.layers]
 
     acc_list = []
+    loss_list = []
+    
     for epoch in range(epochs):
         for i in range(len(X)):
             dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])
@@ -90,7 +110,12 @@ def Adam(model, X, y, measure_function, epochs=100, learning_rate=0.01):
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
             acc = measure_function(y_val, Y_pred)
-            print(f'epoch {epoch:3} - accuracy {acc:.5f}')
+
+            loss = cross_entropy(model.feedfoward(X[i]), y[i])
+
+            print(f'epoch {epoch:3} - Loss {loss:.5f}, Accuracy {acc:.5f}')
+
             acc_list.append(acc)
+            loss_list.append(loss)
 
     return acc_list
