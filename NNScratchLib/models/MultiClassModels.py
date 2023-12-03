@@ -14,23 +14,28 @@ class NeuralNetwork:
         return X
     
     def backpropagation(self, X, y):
+        derivates = []
+
         A = self.feedfoward(X)
         A = A.reshape(len(A),1)
         y = y.reshape(len(y),1)
 
-        # Calculamos el error de la última capa
         A_prev = self.feedfoward(X, -1)
         A_prev = A_prev.reshape(len(A_prev),1)
 
-        dz = A - y
+        dz = self.layers[-1].activation_derivate(A, y)
         dW = dz.dot(A_prev.T)
 
-        # Calculamos el error de la capa anterior
-        A_prev_2 = self.feedfoward(X, -2)
-        A_prev_2 = A_prev_2.reshape(len(A_prev_2),1)
+        derivates.append((dz, dW))
 
-        derivate = self.layers[-2].activation_derivate(self.layers[-2].z(A_prev_2))
-        dz2 = derivate*self.layers[-1].weights.T.dot(dz)
-        dW2 = dz2.dot(A_prev_2.T)
+        for k, layer in enumerate(self.layers[-2::-1]):
+            A_prev = self.feedfoward(X, -k-2)
+            A_prev = A_prev.reshape(len(A_prev),1)
 
-        return dz, dW, dz2, dW2
+            derivate = layer.activation_derivate(layer.z(A_prev))
+            dz = derivate*self.layers[-k-1].weights.T.dot(dz)
+            dW = dz.dot(A_prev.T)
+
+            derivates.append((dz, dW))
+
+        return derivates

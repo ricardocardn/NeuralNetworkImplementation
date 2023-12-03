@@ -13,12 +13,10 @@ def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.
 
     for epoch in range(epochs):
         for i in range(len(X)):
-            dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])                
-            model.layers[-1].weights -= learning_rate*dW
-            model.layers[-2].weights -= learning_rate*dW2
-
-            model.layers[-1].bias -= learning_rate*dz
-            model.layers[-2].bias -= learning_rate*dz2
+            derivates = model.backpropagation(X[i], y[i])                
+            for layer, derivate in zip(model.layers[::-1], derivates):
+                layer.weights -= learning_rate*derivate[1]
+                layer.bias -= learning_rate*derivate[0]
 
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
@@ -46,18 +44,17 @@ def momentum_gradient_descent(model, X, y, measure_function, epochs=100, learnin
 
     for epoch in range(epochs):
         for i in range(len(X)):
-            dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])                
-            vW[-1] = 0.9*vW[-1] + learning_rate*dW
-            vW[-2] = 0.9*vW[-2] + learning_rate*dW2
+            derivates = model.backpropagation(X[i], y[i]) 
 
-            vb[-1] = 0.9*vb[-1] + learning_rate*dz
-            vb[-2] = 0.9*vb[-2] + learning_rate*dz2
+            pos = len(model.layers)-1           
+            for layer, derivate in zip(model.layers[::-1], derivates):
+                vW[pos] = 0.9*vW[pos] + learning_rate*derivate[1]
+                vb[pos] = 0.9*vb[pos] + learning_rate*derivate[0]
 
-            model.layers[-1].weights -= vW[-1]
-            model.layers[-2].weights -= vW[-2]
+                layer.weights -= vW[pos]
+                layer.bias -= vb[pos]
 
-            model.layers[-1].bias -= vb[-1]
-            model.layers[-2].bias -= vb[-2]
+                pos -= 1
 
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
@@ -88,24 +85,26 @@ def Adam(model, X, y, measure_function, epochs=100, learning_rate=0.01):
     
     for epoch in range(epochs):
         for i in range(len(X)):
-            dz, dW, dz2, dW2 = model.backpropagation(X[i], y[i])
-            params = [dW2, dz2, dW, dz]
+            derivates = model.backpropagation(X[i], y[i]) 
 
-            for layer in range(len(model.layers)):
-                vW[layer] = 0.9*vW[layer] + (1-0.9)*params[2*layer]
-                vb[layer] = 0.9*vb[layer] + (1-0.9)*params[2*layer+1]
+            pos = len(model.layers)-1           
+            for layer, derivate in zip(model.layers[::-1], derivates):
+                vW[pos] = 0.9*vW[pos] + (1-0.9)*derivate[1]
+                vb[pos] = 0.9*vb[pos] + (1-0.9)*derivate[0]
 
-                sW[layer] = 0.999*sW[layer] + (1-0.999)*params[2*layer]**2
-                sb[layer] = 0.999*sb[layer] + (1-0.999)*params[2*layer+1]**2
+                sW[pos] = 0.999*sW[pos] + (1-0.999)*derivate[1]**2
+                sb[pos] = 0.999*sb[pos] + (1-0.999)*derivate[0]**2
 
-                vW_corrected = vW[layer]/(1-0.9**(epoch+1))
-                vb_corrected = vb[layer]/(1-0.9**(epoch+1))
+                vW_corrected = vW[pos]/(1-0.9**(epoch+1))
+                vb_corrected = vb[pos]/(1-0.9**(epoch+1))
 
-                sW_corrected = sW[layer]/(1-0.999**(epoch+1))
-                sb_corrected = sb[layer]/(1-0.999**(epoch+1))
+                sW_corrected = sW[pos]/(1-0.999**(epoch+1))
+                sb_corrected = sb[pos]/(1-0.999**(epoch+1))
 
-                model.layers[layer].weights -= learning_rate*vW_corrected/(np.sqrt(sW_corrected) + 1e-8)
-                model.layers[layer].bias -= learning_rate*vb_corrected/(np.sqrt(sb_corrected) + 1e-8)
+                layer.weights -= learning_rate*vW_corrected/(np.sqrt(sW_corrected) + 1e-8)
+                layer.bias -= learning_rate*vb_corrected/(np.sqrt(sb_corrected) + 1e-8)
+
+                pos -= 1
 
         if epoch % 10 == 0:
             Y_pred = [model.feedfoward(x) for x in X_val]
@@ -117,5 +116,3 @@ def Adam(model, X, y, measure_function, epochs=100, learning_rate=0.01):
 
             acc_list.append(acc)
             loss_list.append(loss)
-
-    return acc_list
