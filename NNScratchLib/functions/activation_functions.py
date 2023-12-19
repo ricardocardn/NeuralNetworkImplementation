@@ -24,4 +24,4 @@ def mse(Y_pred, Y):
   return np.mean((Y - Y_pred)**2)
 
 def mse_derivate(Y_pred, Y):
-  return -2 * (Y - softmax)
+  return -2 * (Y - Y_pred)*Y_pred*(1 - Y_pred)
