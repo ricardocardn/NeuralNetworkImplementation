@@ -4,6 +4,12 @@ def cross_entropy(Y_pred, Y):
     return -np.sum(Y*np.log(Y_pred.reshape(1, len(Y_pred))))
 
 
+def mean_squared_error(Y_pred, Y):
+    sse = (Y - Y_pred)**2
+    mse = np.mean(sse)
+    return mse 
+
+
 def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.01):
     X, X_val = X[:int(len(X)*0.8)], X[int(len(X)*0.8):]
     y, y_val = y[:int(len(y)*0.8)], y[int(len(y)*0.8):]
@@ -22,7 +28,7 @@ def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.
             Y_pred = [model.feedfoward(x) for x in X_val]
             acc = measure_function(y_val, Y_pred)
 
-            loss = cross_entropy(model.feedfoward(X[i]), y[i])
+            loss = mean_squared_error(model.feedfoward(X[i]), y[i])
 
             print(f'epoch {epoch:3} - Loss {loss:.5f}, Accuracy {acc:.5f}')
 
@@ -30,6 +36,29 @@ def gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.
             loss_list.append(loss)
 
     return acc_list, loss_list
+
+
+def gradient_descent_autoenc(model, X, y, epochs=100, learning_rate=0.01):
+    X, X_val = X[:int(len(X)*0.8)], X[int(len(X)*0.8):]
+    y, y_val = y[:int(len(y)*0.8)], y[int(len(y)*0.8):]
+
+    loss_list = []
+
+    for epoch in range(epochs):
+        for i in range(len(X)):
+            derivates = model.backpropagation(X[i], y[i])                
+            for layer, derivate in zip(model.layers[::-1], derivates):
+                layer.weights -= learning_rate*derivate[1]
+                layer.bias -= learning_rate*derivate[0]
+
+        if epoch % 10 == 0:
+            loss = mean_squared_error(model.feedfoward(X[i]), y[i])
+
+            print(f'epoch {epoch:3} - Loss {loss:.5f}')
+
+            loss_list.append(loss)
+
+    return loss_list
 
 
 def momentum_gradient_descent(model, X, y, measure_function, epochs=100, learning_rate=0.01):
