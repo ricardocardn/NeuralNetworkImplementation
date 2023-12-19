@@ -67,6 +67,8 @@ The next chunk of code implements the autoencoder used to generate the next pict
 
 ![results](images/results/NoiseRedAutoencoder0.4std_test.png)
 
+Here you have a simplification, but the complete implementation can be found in [tests](tests.ipynb)
+
 ```python
 # Import the necessary classes and functions
 from NNScratchLib.models.MultiClassModels import NeuralNetwork
