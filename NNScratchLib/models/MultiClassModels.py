@@ -1,3 +1,5 @@
+import pickle
+
 class NeuralNetwork:
     def __init__(self):
         self.layers = list()
@@ -39,3 +41,11 @@ class NeuralNetwork:
             derivates.append((dz, dW))
 
         return derivates
+    
+    def save(self, path):
+        with open(path, 'wb') as file:
+            pickle.dump(self, file)
+
+    def load_data(self, path):
+        with open(path, 'rb') as file:
+            return pickle.load(file)
