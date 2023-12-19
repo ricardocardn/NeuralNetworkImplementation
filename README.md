@@ -1,8 +1,9 @@
-<h1 align="center">Neural Network Scrath Implementation :brain:</h1>
+<h1 align="center">Back-Propagation<br>
+Implementation from Scratch :brain:</h1>
 
 <img src="images/results/NoiseRedAutoencoder0.4std_test.png" />
 
-This project implements a simple neural network framework in Python, including functionalities for forward and backward propagation. The neural network consists of customizable sequential layers, allowing the user to define the architecture, activation functions, and their derivatives. The project also includes implementations of three optimization algorithms: gradient descent, momentum gradient descent, and Adam.
+This project implements a simple neural network library written in Python, including functionalities for forward and backward propagation. The neural network consists of customizable sequential layers, allowing the user to define the architecture, activation functions, and their derivatives. The project also includes implementations of three optimization algorithms: gradient descent, momentum gradient descent, and Adam.
 
 ## NeuralNetwork Class
 
