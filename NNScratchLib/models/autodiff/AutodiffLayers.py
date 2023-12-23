@@ -14,11 +14,10 @@ class SequentialLayer:
         return np.dot(self.weights, A_prev).reshape(self.units,1) + self.bias
 
     def A(self, A_prev):
-        self.A_prev = A_prev
         self.output = self.activation(self.z(A_prev))
         return self.activation(self.z(A_prev))
     
-    def backpropagation(self, dz, y=None, learning_rate=0.01):
+    def backward(self, dz, y=None, learning_rate=0.01):
         if dz.size == 0:
             self.output = self.output.reshape(len(self.output),1)
             y = y.reshape(len(y),1)
