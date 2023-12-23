@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 
 class NeuralNetwork:
     def __init__(self):
@@ -41,6 +42,19 @@ class NeuralNetwork:
             derivates.append((dz, dW))
 
         return derivates
+    
+    def backward(self, X, Y, learning_rate, epochs=100):
+        for epoch in range(epochs):
+            for x, y in zip(X, Y):
+                x = x.reshape(len(x),1)
+                y = y.reshape(len(y),1)
+
+                result = self.feedfoward(x)
+
+                dz = self.layers[-1].backpropagation(np.array([]), y)
+
+                for layer in self.layers[-2::-1]:
+                    dz = layer.backpropagation(dz, learning_rate=learning_rate)
     
     def save(self, path):
         with open(path, 'wb') as file:
