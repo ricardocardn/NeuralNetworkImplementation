@@ -37,7 +37,6 @@ def softmax(A):
 def softmax_derivate(Y_pred, Y):
   return Y_pred - Y
 
-# error for autoencoder
 def mse(Y_pred, Y):
   return np.mean((Y - Y_pred)**2)
 
