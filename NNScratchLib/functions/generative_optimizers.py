@@ -55,3 +55,28 @@ def gradient_descent_autoenc(model, X, y, epochs=100, learning_rate=0.01):
             loss_list.append(loss)
 
     return loss_list
+
+
+def gradient_descent_regression(model, X, y, epochs=100, learning_rate=0.01):
+    X, X_val = X[:int(len(X)*0.8)], X[int(len(X)*0.8):]
+    y, y_val = y[:int(len(y)*0.8)], y[int(len(y)*0.8):]
+
+    loss_list = []
+
+    loss = mean_squared_error(model.feedfoward(X[0]), y[0])
+    print(f'Loss before training {loss:.5f}')
+    loss_list.append(loss)
+
+    for epoch in range(epochs):
+        for i in range(len(X)):
+            derivates = model.backpropagation(X[i], y[i])                
+            for layer, derivate in zip(model.layers[::-1], derivates):
+                layer.weights -= learning_rate*derivate[1]
+                layer.bias -= learning_rate*derivate[0]
+
+        if epoch % 10 == 0:
+            loss = mean_squared_error(model.feedfoward(X[i]), y[i])
+            print(f'epoch {epoch:3} - Loss {loss:.5f}')
+            loss_list.append(loss)
+
+    return loss_list

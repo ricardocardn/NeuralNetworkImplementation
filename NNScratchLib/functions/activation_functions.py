@@ -12,6 +12,12 @@ def ReLU(x):
 def ReLU_derivate(x):
   return x > 0
 
+def identity(x):
+  return x
+
+def identity_derivate(x):
+  return 1
+
 def softmax(A):
   exp_A = np.e**(A - np.max(A))
   return exp_A / np.sum(exp_A)
@@ -25,3 +31,6 @@ def mse(Y_pred, Y):
 
 def mse_derivate(Y_pred, Y):
   return -2 * (Y - Y_pred)*Y_pred*(1 - Y_pred)
+
+def mse_derivate2(Y_pred, Y):
+  return 2 * (Y_pred - Y)
