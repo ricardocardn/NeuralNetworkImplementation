@@ -12,6 +12,18 @@ def ReLU(x):
 def ReLU_derivate(x):
   return x > 0
 
+def leaky_ReLU(x):
+  return np.maximum(0.01*x, x)
+
+def leaky_ReLU_derivate(x):
+  return 0.01 if x < 0 else 1
+
+def tanh(x):
+  return np.tanh(x)
+
+def tanh_derivate(x):
+  return 1 - np.tanh(x)**2
+
 def identity(x):
   return x
 

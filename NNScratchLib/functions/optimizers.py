@@ -117,3 +117,5 @@ def Adam(model, X, y, measure_function, epochs=100, learning_rate=0.01):
 
             acc_list.append(acc)
             loss_list.append(loss)
+
+    return acc_list, loss_list
