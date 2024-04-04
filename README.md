@@ -3,7 +3,7 @@ Implementation from Scratch :brain:</h1>
 
 <img src="images/results/NoiseRedAutoencoder0.4std_test.png" />
 
-This project implements a simple neural network library written in Python, including functionalities for forward and backward propagation. The neural network consists of customizable sequential layers, allowing the user to define the architecture, activation functions, and their derivatives. The project also includes implementations of three optimization algorithms: gradient descent, momentum gradient descent, and Adam.
+This is the source repository for the article [Implementación del Algoritmo de Back-Propagation Para su Aplicación en la Clasificación, Regresión e IA Generativa](Paper.pdf), which seeks to set a solid mathematical foundation for the Back-Propagation algorithm and aims to implement a simple neural network library written in Python using such an algorithm, including functionalities for both forward and backward propagation. The neural network consists of customizable sequential layers, allowing the user to define the architecture, activation functions, and their derivatives. The project also includes implementations of three optimization algorithms: gradient descent, momentum gradient descent, and Adam.
 
 ## NeuralNetwork Class
 
